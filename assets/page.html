@@ -1,122 +1,139 @@
 <!DOCTYPE html>
 <head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link rel="stylesheet" href="bootstrap.min.css" media="screen">
     <title>{TITLE}</title>
     <meta name="description" content="{CLEAN_DESCRIPTION}" />
-    <style>
+  <style>
+    :root {
+      --grid-size: 1fr;
+    }
     .sel_table tr td
     {
-        border: 1px solid black;
-        padding-right: 16px;
-        padding-left: 16px;
+      border: 1px solid black;
+      padding-right: 16px;
+      padding-left: 16px;
     }
     .secondary
     {
-        background-color: #202020;
+      background-color: #202020;
     }
     .primary
     {
-        background-color: #303030;
+      background-color: #303030;
     }
     .axis_table_cell
     {
-        max-width: 40em;
-        min-width: 10em;
-        max-height: 8em;
-        overflow: auto;
+      max-width: 40em;
+      min-width: 10em;
+      max-height: 8em;
+      overflow: auto;
     }
     .tabval_subdiv
     {
-        max-width: calc(95vw - 40em);
-        max-height: 8em;
-        overflow: auto;
+      max-width: calc(95vw - 40em);
+      max-height: 8em;
+      overflow: auto;
     }
     table tr td, table tr th {
-        vertical-align: top;
-        border: 1px solid black;
-    }
-    th {
-        position: sticky;
-        top: -1px;
-        background-color: #202020;
-        background-clip: padding-box;
+      vertical-align: top;
+      border: 1px solid black;
     }
     .popup_modal_background {
-        font-family: monospace, monospace;
-        background-color: rgb(50, 50, 50, 0.7);
-        text-align: center;
+      font-family: monospace, monospace;
+      background-color: rgb(50, 50, 50, 0.7);
+      text-align: center;
     }
     .popup_modal_img {
-        height: calc(min(100vw - 6em, 100vh - 6em));
-        position: relative;
-        margin: auto;
+      height: calc(min(100vw - 6em, 100vh - 6em));
+      position: relative;
+      margin: auto;
     }
     .popup_modal_undertext {
-        background-color: #404060;
-        overflow-wrap: break-word;
+      background-color: #404060;
+      overflow-wrap: break-word;
     }
     .modal_inner_div {
-        width: calc(min(100vw, 100vh - 6em));
-        margin: auto;
+      width: calc(min(100vw, 100vh - 6em));
+      margin: auto;
     }
     .advanced_settings_section {
-        max-width: calc(max(1000px, 60em));
-        text-align: left;
+      max-width: calc(max(1000px, 60em));
+      text-align: left;
     }
     .timer_range {
-        vertical-align: bottom;
+      vertical-align: bottom;
     }
     .tab_hidden {
-        display: none;
+      display: none;
     }
     .nav-link:focus {
-        background-color: #909050 !important;
+      background-color: #909050 !important;
     }
-    .axis_label_td {
-        position: sticky;
-        left: 0px;
-        background-color: #202020;
-        background-clip: padding-box;
+    .y_axis_label {
+      position: sticky;
+      left: 0px;
+      background-color: #202020;
+      background-clip: padding-box;
+      width: 100%;
+      text-align: center;
+    }
+    .x_axis_label {
+      position: sticky;
+      top: -1px;
+      background-color: #202020;
+      background-clip: padding-box;
+      width: 100%;
+      text-align: center;
     }
     .superaxis_second {
-        background-color: #303030;
+      background-color: #303030;
     }
     .axis_selectors {
-        text-align: right;
-        margin: auto;
-        width: fit-content;
+      text-align: right;
+      margin: auto;
+      width: fit-content;
     }
-    </style>
-    <script src="jquery.min.js"></script>
+    #image_table {
+      display: grid;
+      grid-template-columns: max-content var(--grid-size);
+      align-items: center;
+      justify-items: center;
+      overflow-wrap: anywhere;
+    }
+    #image_table > div:not(:empty) {
+      border: 2px solid black;
+    }
+  </style>
+  <script src="jquery.min.js"></script>
 </head>
 <body>
-    <center>
+  <center>
         <h1>{TITLE}</h1>
         <h4>{DESCRIPTION}</h4>
         <noscript>This page requires JavaScript to work. Don't worry, it's all local to the current page, and open source on GitHub.</noscript>
         <hr>
-        <div class="accordion advanced_settings_section" id="settings_according">
-            <div class="accordion-item">
-                <h2 class="accordion-header" id="setting_according_heading">
+    <div class="accordion advanced_settings_section" id="settings_according">
+      <div class="accordion-item">
+        <h2 class="accordion-header" id="setting_according_heading">
                     <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#settings_according_collapse" aria-expanded="false" aria-controls="settings_according_collapse">Advanced Settings</button>
-                </h2>
+        </h2>
                 <div id="settings_according_collapse" class="accordion-collapse collapse" aria-labelledby="setting_according_heading" data-bs-parent="#settings_according">
-                    <div class="accordion-body">
+          <div class="accordion-body">
                         {ADVANCED_SETTINGS}
-                    </div>
-                </div>
-            </div>
-        </div>
+      </div>
+      </div>
+    </div>
+  </div>
         <br><input class="form-check-input" type="checkbox" id="showDescriptions" checked="true" autocomplete="off" onchange="javascript:toggleDescriptions()"> <label class="form-check-label" for="showDescriptions" title="Uncheck this to focus on the grid. Check it to see the full descriptions of each option.">Show descriptions of axes and values</label>
     </center>
     <br>
     {CONTENT}
     <div class="modal modal-fullscreen popup_modal_background" id="image_info_modal"></div>
     <br><div style="width:256px;height:512px;"></div> <!-- Spacer to reduce screen-jumping if images load while you're scrolled down -->
-    <footer>
-        <center>
+  <footer>
+    <center>
             <hr>
             {AUTHOR}
             <br>The technology that powers this page is <a href="https://github.com/mcmonkeyprojects/sd-infinity-grid-generator-script">Infinity Grid Generator for Stable Diffusion</a>, published under the MIT license by Alex 'mcmonkey' Goodwin.
@@ -125,9 +142,9 @@
             <br>Made using the <a href="https://bootswatch.com/darkly/">Darkly Bootstrap Theme</a> by Thomas Park, which was released under the <a href="https://github.com/thomaspark/bootswatch/blob/95df99d76147797cbcb1014b639805add2327f65/LICENSE">MIT License</a>.
             <br>
             <br><div style="width:256px;height:512px;"></div>
-        </center>
-    </footer>
-    <script src="data.js?vary=8"></script>
-    <script src="proc.js?vary=8"></script>
-    <script src="bootstrap.bundle.min.js"></script>
+    </center>
+  </footer>
+  <script src="data.js?vary=8"></script>
+  <script src="proc.js?vary=8"></script>
+  <script src="bootstrap.bundle.min.js"></script>
 </body>
